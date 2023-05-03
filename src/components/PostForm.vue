@@ -2,25 +2,49 @@
         <form @submit.prevent>
         <h4>Создание поста</h4>
         <input 
-            v-bind:value="title"
-            @input="title = $event.target.value" 
+            v-model="post.title"
             class="input" 
             type="text" 
-            placeholder="Название">
+            placeholder="Название"/>
         <input 
-            v-bind:value="body" 
-            @input="body = $event.target.value" 
+            v-model="post.body"
             class="input" 
             type="text" 
-            placeholder="Описание">
-        <button class="btn">Создать пост</button>
+            placeholder="Описание"/>
+        <MyButton             
+            class="btn"
+            style="align-self: flex-end;"
+            @click="createPost"
+            >
+            Создать пост
+        </MyButton>
         </form>
 </template>
 
 <script>
-    export default {
-        
+import MyButton from "./components/UI/MyButton.vue";
+export default {
+   components: { MyButton },
+    data(){
+        return {
+            post: {
+                title: '',
+                body: ''
+            }
+        }
+    },
+    methods: {
+        createPost(){
+            this.post.id = Date.now();
+            this.$emit('create', this.post)
+            this.post = {
+                title: '',
+                body: ''
+            }
+
+        },
     }
+}
 </script>
 
 <style scoped>
@@ -36,13 +60,5 @@ form {
     margin-top: 15px;
 }
 
-.btn {
-    margin-top: 15px;
-    align-self: flex-end;
-    padding: 10px 15px;
-    background: none;
-    color: teal;
-    border: 1px solid teal;
-}
 
 </style>
