@@ -21,9 +21,9 @@ export default {
     data() {
         return {
             posts: [
-                {id: 1, tittle: 'Javascript', body: "Описание поста"},
-                {id: 2, tittle: 'Javascript 2', body: "Описание поста 2"},
-                {id: 3, tittle: 'Javascript 3', body: "Описание поста 3"},
+                {id: 1, title: 'Javascript', body: "Описание поста"},
+                {id: 2, title: 'Javascript 2', body: "Описание поста 2"},
+                {id: 3, title: 'Javascript 3', body: "Описание поста 3"},
             ],
 
         }

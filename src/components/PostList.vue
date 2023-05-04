@@ -3,7 +3,7 @@
         <h3>Список пользователей</h3>
         <post-item         
             v-for="post in posts"
-            :key="post"
+            :key="post.id"
             :post="post"   
             />
     </div>
