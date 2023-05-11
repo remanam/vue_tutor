@@ -24,7 +24,7 @@ export default {
     components: {
         PostForm,
         PostList
-    },
+    }, 
     data() {
         return {
             posts: [
