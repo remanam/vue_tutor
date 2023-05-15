@@ -1,5 +1,7 @@
 <template>
+    <div>
         <form @submit.prevent>
+
         <h4>Создание поста</h4>
         <my-input
             v-model="post.title"
@@ -15,7 +17,9 @@
             >
             Создать пост
         </my-button>
+
         </form>
+    </div>
 </template>
 
 <script>
