@@ -1,7 +1,9 @@
 <template>
     <div class="post">
         <div >
+            <div><strong>id: </strong> {{ post.id }} </div>
             <div><strong>Название: </strong> {{ post.title }} </div>
+ 
             <div><strong>Описание: </strong> {{ post.body }} </div>
         </div>
         <div class="post__btns">
@@ -27,9 +29,9 @@ export default {
 
 <style>
 .post {
-    padding: 15px;
+    padding: 12px;
     border: 2px solid teal;
-    margin-top: 15px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
