@@ -136,10 +136,11 @@ export default {
             console.log(this.$refs.observer)
             const options = {
                 rootMargin: '0px',
-                thershold: 1.0
+                threshold: 1.0
             }
             const callback = (entries, observer) => {
                 if (entries[0].isIntersecting && this.posts.page < this.totalPages){
+                    console.log("Пересечен")
                     console.log(observer)
                     this.loadMorePosts()
                 }
