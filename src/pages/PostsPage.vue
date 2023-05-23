@@ -27,7 +27,7 @@
             @remove="removePost"
             v-if="isPostsLoading === false"/>  
         <div v-else> Идёт загрузка...</div> 
-        <div ref="observer" class="observer"></div>
+        <div v-intersection="loadMorePosts" class="observer"></div>
 
         <!-- <div class="page__wrapper">
             <div 
@@ -133,20 +133,20 @@ export default {
     mounted() {
             this.fetchPosts();
             //console.log(this.$refs.observer)
-            const options = {
-                rootMargin: '0px',
-                threshold: 1.0
-            }
-            const callback = (entries, observer) => {
+            // const options = {
+            //     rootMargin: '0px',
+            //     threshold: 1.0
+            // }
+            // const callback = (entries, observer) => {
 
-                if (entries[0].isIntersecting && this.page < this.totalPages){
+            //     if (entries[0].isIntersecting && this.page < this.totalPages){
                     
-                    console.log(observer)
-                    this.loadMorePosts()
-                }
-            };
-            const observer = new IntersectionObserver(callback, options);
-            observer.observe(this.$refs.observer)
+            //         console.log(observer)
+            //         this.loadMorePosts()
+            //     }
+            // };
+            // const observer = new IntersectionObserver(callback, options);
+            // observer.observe(this.$refs.observer)
     },
     computed: {
         sortedPosts(){     
