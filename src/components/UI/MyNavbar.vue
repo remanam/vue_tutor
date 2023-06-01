@@ -3,6 +3,7 @@
         <div @click="$router.push('/')"> VUE 3</div>
         <div class="navbar__btns">
             <my-button @click="$router.push('/posts')" >Посты</my-button>
+            <my-button @click="$router.push('/posts_store')" >Посты с VUEX!</my-button>
             <my-button @click="$router.push('/about')" style="margin-left: 20px;" >О сайте</my-button>
         </div>
 

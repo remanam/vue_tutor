@@ -1,21 +1,29 @@
 <template>
     <div >
+
+        <h1> {{ $store.state.isAuth ? "Пользователь авторизован": "Авторизуйтесь, чтобы использовать сервис" }}</h1>
+        <h1>{{ $store.getters.doubleLikes }}</h1>
+        <div>
+            <my-button @click="$store.commit('incrementLikes')"> Лайк +</my-button>
+            <my-button @click="$store.commit('decrementLikes')"> Лайк -</my-button>
+        </div>
+
         <h1>Страница с постами</h1>
-        <my-input
+        <!-- <my-input
         v-focus
         v-model="searchQuery"
         placeholder="Поиск...."
-        />
+        /> -->
         <div class="app__btns">
             <my-button
                 @click="showDialog"
                 > Создать пост
             </my-button>
 
-            <my-select
+            <!-- <my-select
                 v-model="selectedSort"
                 :options="sortOptions"
-            />
+            /> -->
         </div>
 
 
@@ -24,13 +32,14 @@
         </my-dialog>
 
         <post-list      
-            :posts="sortedAndSearchedPosts"
+            :posts="$store.getters.sortedAndSearchedPosts"
             @remove="removePost"
             v-if="isPostsLoading === false"/>  
         <div v-else> Идёт загрузка...</div> 
-        <div v-intersection="loadMorePosts" class="observer"></div>
+        <!-- <div v-intersection="loadMorePosts" class="observer"></div> -->
 
-        <!-- <div class="page__wrapper">
+
+        <div class="page__wrapper">
             <div 
             v-for="pageNumber in totalPages"
             :key="pageNumber"
@@ -42,16 +51,17 @@
             >
                 {{ pageNumber }}
             </div>
-        </div>    -->
+        </div>   
     </div>
 </template>
 
 
 
 <script>
-import PostForm from "@/components/PostForm.vue"
-import PostList from "@/components/PostList.vue"
-import axios from "axios"
+import PostForm from "@/components/PostForm"
+import PostList from "@/components/PostList"
+//import axios from "axios"
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
     components: {
@@ -60,22 +70,21 @@ export default {
     }, 
     data() {
         return {
-            posts: [],
             dialogVisible: false,
-            isPostsLoading: false,
-            selectedSort: '',
-            searchQuery: '',
-            page: 1,
-            limit: 10,
-            totalPages: 0,
-            sortOptions: [
-                {value: 'title', name: 'По названию'},
-                {value: 'body', name: 'По содержимому'},
-            ]
-
         }
     },
     methods: {
+        // ...mapActions({
+        //     fetchPosts: 'post/fetchPosts',
+        //     loadMorePosts: 'post/loadMorePosts',
+        // }),
+        ...mapActions('postModule', {fetchPosts: 'post/fetchPosts'}),
+        ...mapMutations({
+            setPage: 'post/setPage'
+        }),
+
+
+
         createPost(post) {
             this.posts.push(post)
             this.dialogVisible = false
@@ -86,45 +95,7 @@ export default {
         showDialog(){
             this.dialogVisible = true;
         },
-        async fetchPosts() {
-            try {
-                this.isPostsLoading = true
-                
-                const response = await axios.get("https://jsonplaceholder.typicode.com/posts", {
-                    params: {
-                        _page: this.page,
-                        limit: this.limit,
-
-                    }
-                })
-                this.totalPages = 10//Math.ceil(response.headers['x-total-count'] / this.limit) // Округляет в большую сторону
-                this.posts = response.data
-                console.log(response)          
-
-            } catch(e){
-                alert("Ошибка получения списка постов")
-            }  finally {
-                this.isPostsLoading = false;
-            }
-        },
-        async loadMorePosts() {
-            try {
-                this.page += 1;
-                
-                const response = await axios.get("https://jsonplaceholder.typicode.com/posts", {
-                    params: {
-                        _page: this.page,
-                        limit: this.limit,
-
-                    }
-                })
-                this.totalPages = 10//Math.ceil(response.headers['x-total-count'] / this.limit) // Округляет в большую сторону
-                this.posts = [...this.posts, ...response.data]
-
-            } catch(e){
-                alert("Ошибка получения списка постов")
-            }
-        },
+ 
         // //Пагинация
         // changePage(pageNumber) {
         //     this.page = pageNumber
@@ -132,7 +103,7 @@ export default {
 
     },
     mounted() {
-            this.fetchPosts();
+            //this.fetchPosts();
             //console.log(this.$refs.observer)
             // const options = {
             //     rootMargin: '0px',
@@ -150,12 +121,21 @@ export default {
             // observer.observe(this.$refs.observer)
     },
     computed: {
-        sortedPosts(){     
-                return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
-        },
-        sortedAndSearchedPosts(){
-            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
-        }
+        ...mapState({
+            posts: state => state.post.posts,
+            isPostsLoading: state => state.post.isPostsLoading,
+            selectedSort: state => state.post.selectedSort,
+            searchQuery: state => state.post.searchQuery,
+            page: state => state.post.page,
+            limit: state => state.post.limit,
+            totalPages: state => state.post.totalPages,
+            sortOptions: state => state.post.sortOptions,
+
+        }),
+        ...mapGetters({
+            sortedPosts: 'post/sortedPosts',
+            sortedAndSearchedPosts: 'post/sortedAndSearchedPosts' ,
+        })
     },
     watch: {
         // page(){
