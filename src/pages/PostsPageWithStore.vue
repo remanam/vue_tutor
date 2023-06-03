@@ -1,45 +1,48 @@
 <template>
-    <div >
+    <div>
 
-        <h1> {{ $store.state.isAuth ? "Пользователь авторизован": "Авторизуйтесь, чтобы использовать сервис" }}</h1>
+        <!-- <h1> {{ $store.state.isAuth ? "Пользователь авторизован": "Авторизуйтесь, чтобы использовать сервис" }}</h1>
         <h1>{{ $store.getters.doubleLikes }}</h1>
         <div>
             <my-button @click="$store.commit('incrementLikes')"> Лайк +</my-button>
             <my-button @click="$store.commit('decrementLikes')"> Лайк -</my-button>
-        </div>
+        </div> -->
 
         <h1>Страница с постами</h1>
-        <!-- <my-input
+        <my-input
         v-focus
-        v-model="searchQuery"
+        :model-value="searchQuery"
+        @update:model-value="setSearchQuery"
         placeholder="Поиск...."
-        /> -->
+        />
         <div class="app__btns">
             <my-button
                 @click="showDialog"
                 > Создать пост
             </my-button>
 
-            <!-- <my-select
-                v-model="selectedSort"
+            <my-select
+                :model-value="selectedSort"
+                @update:model-value="setSelectedSort"
                 :options="sortOptions"
-            /> -->
+            />
         </div>
 
 
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost"/>
         </my-dialog>
-
+        1234
         <post-list      
-            :posts="$store.getters.sortedAndSearchedPosts"
+            :posts="sortedAndSearchedPosts"
             @remove="removePost"
             v-if="isPostsLoading === false"/>  
         <div v-else> Идёт загрузка...</div> 
-        <!-- <div v-intersection="loadMorePosts" class="observer"></div> -->
+        12345
+        <div v-intersection="loadMorePosts" class="observer"></div>
 
 
-        <div class="page__wrapper">
+        <!-- <div class="page__wrapper">
             <div 
             v-for="pageNumber in totalPages"
             :key="pageNumber"
@@ -51,7 +54,7 @@
             >
                 {{ pageNumber }}
             </div>
-        </div>   
+        </div>    -->
     </div>
 </template>
 
@@ -74,13 +77,14 @@ export default {
         }
     },
     methods: {
-        // ...mapActions({
-        //     fetchPosts: 'post/fetchPosts',
-        //     loadMorePosts: 'post/loadMorePosts',
-        // }),
-        ...mapActions('postModule', {fetchPosts: 'post/fetchPosts'}),
+        ...mapActions({
+            fetchPosts: 'post/fetchPosts',
+            loadMorePosts: 'post/loadMorePosts'
+        }),
         ...mapMutations({
-            setPage: 'post/setPage'
+            setPage: 'post/setPage',
+            setSearchQuery: 'post/setSearchQuery',
+            setSelectedSort: 'post/setSelectedSort'
         }),
 
 
@@ -96,15 +100,18 @@ export default {
             this.dialogVisible = true;
         },
  
-        // //Пагинация
-        // changePage(pageNumber) {
-        //     this.page = pageNumber
-        // }
+        //Пагинация
+        changePage(pageNumber) {
+            this.page = pageNumber
+        }
 
     },
     mounted() {
-            //this.fetchPosts();
-            //console.log(this.$refs.observer)
+            console.log("1")
+            this.fetchPosts();
+            console.log("2")
+            
+            // console.log(this.$refs.observer)
             // const options = {
             //     rootMargin: '0px',
             //     threshold: 1.0

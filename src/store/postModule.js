@@ -20,6 +20,9 @@ export const postModule = {
         },
         sortedAndSearchedPosts(state, getters){
             return getters.sortedPosts.filter(post => post.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        },
+        defaultPosts(state){
+            return state.posts
         }
     },
     mutations: {
@@ -66,7 +69,7 @@ export const postModule = {
                 commit('setLoading', false);
             }
         },
-        async loadMorePosts(state, commit) {
+        async loadMorePosts({state, commit}) {
             try {
                 commit('setPage', state.page + 1)
                 
@@ -82,6 +85,7 @@ export const postModule = {
 
             } catch(e){
                 alert("Ошибка получения списка постов")
+                console.log(e)
             }
         },
     },
