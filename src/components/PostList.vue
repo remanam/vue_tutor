@@ -1,6 +1,9 @@
 <template>
-    <div v-if="posts.length > 0 ">
+    <!-- <div v-if="posts.length > 0 "> -->
+        <div v-if="arePostsExist">
         <h3>Список постов</h3>
+
+
         <transition-group name="post-list">
             <post-item         
                 v-for="post in posts"
@@ -23,7 +26,12 @@ import PostItem from './PostItem.vue';
                 type: Array,
                 required: true
             }
+        },
+    computed: {
+        arePostsExist(){
+            return this.posts?.length > 0
         }
+    }
     }
 </script>
 
